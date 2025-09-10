@@ -1,4 +1,33 @@
-﻿Add-Type @"
+﻿<#
+
+.FUNCTIONALITY
+Captures how long it takes to launch MS teams and MS Office
+
+.SYNOPSIS
+
+.NOTES
+Change log
+
+Sept 9, 2025
+-Initial version
+
+Sept 10, 2025
+-Updated to dynamically capture MS teams path
+
+.DESCRIPTION
+Author oreynolds@gmail.com
+
+.EXAMPLE
+./Get-MS365LaunchTimes.ps1
+
+.NOTES
+
+.Link
+https://github.com/getvpro/Misc/blob/main/Get-MS365LaunchTimes.ps1
+#>
+
+
+Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 public class User32 {
@@ -9,7 +38,9 @@ public class User32 {
 
 write-host "test #1 MS Teams" -ForegroundColor Green
 
-$exePath = "C:\Program Files\WindowsApps\MSTeams_25227.203.3915.2444_x64__8wekyb3d8bbwe\ms-teams.exe"
+$teamsExeName = "ms-teams.exe"
+$exePath = (Get-AppxPackage | where {$_.Name -contains "MSTeams"}).InstallLocation + "\$teamsExeName"
+
 $App = ($exePath.Split("\"))[-1]
 
 Write-Warning "Force closing $App and waiting 1 second"
